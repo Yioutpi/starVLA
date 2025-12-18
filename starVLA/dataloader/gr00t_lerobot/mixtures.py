@@ -83,15 +83,6 @@ DATASET_NAMED_MIXTURES = {
         ("gr1_unified.PosttrainPnPNovelFromTrayToTieredshelfSplitA_GR1ArmsAndWaistFourierHands_1000", 1.0, "fourier_gr1_arms_waist"),
     ],
 
-
-    "fourier_gr1_unified_1000_PnPMilkToMicrowaveClose": [
-        ("gr1_unified.PnPMilkToMicrowaveClose_GR1ArmsAndWaistFourierHands_1000", 1.0, "fourier_gr1_arms_waist"),
-    ],
-
-    "fourier_gr1_10K_PnPMilkToMicrowaveClose": [
-        ("gr1_arms_waist.PlaceMilkToMicrowave", 1.0, "fourier_gr1_arms_waist"),
-    ],
-
     "fourier_gr1_10K_pretrain": [
         ("gr1_arms_waist.CanToDrawer", 1.0, "fourier_gr1_arms_waist"),
         ("gr1_arms_waist.CupToDrawer", 1.0, "fourier_gr1_arms_waist"),

@@ -4,102 +4,108 @@ This document provides instructions for reproducing our **experimental results**
 The evaluation process consists of two main parts:  
 
 1. Setting up the `robocasa` environment and dependencies.  
-2. Running the evaluation by launching services in both `internvla_m1` and `LIBERO` environments.  
+2. Running the evaluation by launching services in both `starVLA` and `robocasa` environments.  
 
-We have verified that this workflow runs successfully on both **NVIDIA A100** and **RTX 4090** GPUs.  
+We have verified that this workflow runs successfully on **NVIDIA A100** GPUs.  
+
+---
+## 📊 Experimental Results
+| Environment                                                                 | GR00T-N1.5 | Qwen3VL-GR00T | Qwen3VL-Pi | Qwen3VL-oft | Qwen3VL-FAST |
+|-----------------------------------------------------------------------------|--------------|-------------|-----------|------------|-------------|
+| gr1_unified/PnPCupToDrawerClose_GR1ArmsAndWaistFourierHands_Env             | 0.38         | 0.18        |           |            |             |
+| gr1_unified/PnPPotatoToMicrowaveClose_GR1ArmsAndWaistFourierHands_Env       | 0.32         | 0.24        |           |            |             |
+| gr1_unified/PnPMilkToMicrowaveClose_GR1ArmsAndWaistFourierHands_Env         | 0.60         | 0.52        |           |            |             |
+| gr1_unified/PnPBottleToCabinetClose_GR1ArmsAndWaistFourierHands_Env         | 0.54         | 0.46        |           |            |             |
+| gr1_unified/PnPWineToCabinetClose_GR1ArmsAndWaistFourierHands_Env           | 0.38         | 0.22        |           |            |             |
+| gr1_unified/PnPCanToDrawerClose_GR1ArmsAndWaistFourierHands_Env             | 0.50         | 0.16        |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromCuttingboardToBasketSplitA_GR1ArmsAndWaistFourierHands_Env | 0.38 | 0.06 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromCuttingboardToCardboardboxSplitA_GR1ArmsAndWaistFourierHands_Env | 0.46 | 0.24 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromCuttingboardToPanSplitA_GR1ArmsAndWaistFourierHands_Env | 0.58 | 0.42 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromCuttingboardToPotSplitA_GR1ArmsAndWaistFourierHands_Env | 0.62 | 0.22 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromCuttingboardToTieredbasketSplitA_GR1ArmsAndWaistFourierHands_Env | 0.28 | 0.38 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromPlacematToBasketSplitA_GR1ArmsAndWaistFourierHands_Env | 0.30 | 0.18 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromPlacematToBowlSplitA_GR1ArmsAndWaistFourierHands_Env | 0.60 | 0.34 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromPlacematToPlateSplitA_GR1ArmsAndWaistFourierHands_Env | 0.56 | 0.26 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromPlacematToTieredshelfSplitA_GR1ArmsAndWaistFourierHands_Env | 0.36 | 0.12 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromPlateToBowlSplitA_GR1ArmsAndWaistFourierHands_Env | 0.58 | 0.44 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromPlateToCardboardboxSplitA_GR1ArmsAndWaistFourierHands_Env | 0.44 | 0.10 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromPlateToPanSplitA_GR1ArmsAndWaistFourierHands_Env | 0.60 | 0.34 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromPlateToPlateSplitA_GR1ArmsAndWaistFourierHands_Env | 0.64 | 0.22 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromTrayToCardboardboxSplitA_GR1ArmsAndWaistFourierHands_Env | 0.52 | 0.26 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromTrayToPlateSplitA_GR1ArmsAndWaistFourierHands_Env | 0.48 | 0.12 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromTrayToPotSplitA_GR1ArmsAndWaistFourierHands_Env | 0.60 | 0.16 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromTrayToTieredbasketSplitA_GR1ArmsAndWaistFourierHands_Env | 0.52 | 0.30 |           |            |             |
+| gr1_unified/PosttrainPnPNovelFromTrayToTieredshelfSplitA_GR1ArmsAndWaistFourierHands_Env | 0.32 | 0.06 |           |            |             |
+| **Average** | **0.48** | **0.25** |           |            |             |
+
+All the above tasks are evaluated at 50 rollouts each.
 
 ---
 
-## 📊 Experimental Results
 
-| Environment                                                                 | GR00T-N1.5 | QwenPI |
-|-----------------------------------------------------------------------------|--------------|-------------|
-| gr1_unified/PnPCupToDrawerClose_GR1ArmsAndWaistFourierHands_Env             | 0.38         | —           |
-| gr1_unified/PnPPotatoToMicrowaveClose_GR1ArmsAndWaistFourierHands_Env       | 0.32         | —           |
-| gr1_unified/PnPMilkToMicrowaveClose_GR1ArmsAndWaistFourierHands_Env         | 0.60         | —           |
-| gr1_unified/PnPBottleToCabinetClose_GR1ArmsAndWaistFourierHands_Env         | 0.54         | —           |
-| gr1_unified/PnPWineToCabinetClose_GR1ArmsAndWaistFourierHands_Env           | 0.38         | —           |
-| gr1_unified/PnPCanToDrawerClose_GR1ArmsAndWaistFourierHands_Env             | 0.50         | —           |
-| gr1_unified/PosttrainPnPNovelFromCuttingboardToBasketSplitA_GR1ArmsAndWaistFourierHands_Env | 0.38 | — |
-| gr1_unified/PosttrainPnPNovelFromCuttingboardToCardboardboxSplitA_GR1ArmsAndWaistFourierHands_Env | 0.46 | — |
-| gr1_unified/PosttrainPnPNovelFromCuttingboardToPanSplitA_GR1ArmsAndWaistFourierHands_Env | 0.58 | — |
-| gr1_unified/PosttrainPnPNovelFromCuttingboardToPotSplitA_GR1ArmsAndWaistFourierHands_Env | 0.62 | — |
-| gr1_unified/PosttrainPnPNovelFromCuttingboardToTieredbasketSplitA_GR1ArmsAndWaistFourierHands_Env | 0.28 | — |
-| gr1_unified/PosttrainPnPNovelFromPlacematToBasketSplitA_GR1ArmsAndWaistFourierHands_Env | 0.30 | — |
-| gr1_unified/PosttrainPnPNovelFromPlacematToBowlSplitA_GR1ArmsAndWaistFourierHands_Env | 0.60 | — |
-| gr1_unified/PosttrainPnPNovelFromPlacematToPlateSplitA_GR1ArmsAndWaistFourierHands_Env | 0.56 | — |
-| gr1_unified/PosttrainPnPNovelFromPlacematToTieredshelfSplitA_GR1ArmsAndWaistFourierHands_Env | 0.36 | — |
-| gr1_unified/PosttrainPnPNovelFromPlateToBowlSplitA_GR1ArmsAndWaistFourierHands_Env | 0.58 | — |
-| gr1_unified/PosttrainPnPNovelFromPlateToCardboardboxSplitA_GR1ArmsAndWaistFourierHands_Env | 0.44 | — |
-| gr1_unified/PosttrainPnPNovelFromPlateToPanSplitA_GR1ArmsAndWaistFourierHands_Env | 0.60 | — |
-| gr1_unified/PosttrainPnPNovelFromPlateToPlateSplitA_GR1ArmsAndWaistFourierHands_Env | 0.64 | — |
-| gr1_unified/PosttrainPnPNovelFromTrayToCardboardboxSplitA_GR1ArmsAndWaistFourierHands_Env | 0.52 | — |
-| gr1_unified/PosttrainPnPNovelFromTrayToPlateSplitA_GR1ArmsAndWaistFourierHands_Env | 0.48 | — |
-| gr1_unified/PosttrainPnPNovelFromTrayToPotSplitA_GR1ArmsAndWaistFourierHands_Env | 0.60 | — |
-| gr1_unified/PosttrainPnPNovelFromTrayToTieredbasketSplitA_GR1ArmsAndWaistFourierHands_Env | 0.52 | — |
-| gr1_unified/PosttrainPnPNovelFromTrayToTieredshelfSplitA_GR1ArmsAndWaistFourierHands_Env | 0.32 | — |
-| **Average** | **0.48** | **—** |
+# 🚀 Reproduce Training Results
+## 📦 Step0: Download the training dataset
+Download the PhysicalAI-Robotics-GR00T-X-Embodiment-Sim directory datasets from [HuggingFace](https://huggingface.co/datasets/nvidia/PhysicalAI-Robotics-GR00T-X-Embodiment-Sim) to the playground/Datasets/nvidia/PhysicalAI-Robotics-GR00T-X-Embodiment-Sim directory
 
+To download only the relevant finetuning folders, you can refer [GR00T-N1.5](https://github.com/NVIDIA/Isaac-GR00T/tree/4af2b622892f7dcb5aae5a3fb70bcb02dc217b96/examples/RoboCasa#-1-dataset-preparation) repo's instruction. 
+Or using the script download the *_1000 folders.
 
+```bash
+python examples/Robocasa_tabletop/download_gr00t_ft_data.py
+```
+
+## 🚀 Step1: Start Training
+Different datasets can be selected by modifying the parameter `data_mix`, and the following script can be used to fine-tune the `*_1000` datasets:
+```bash
+bash scripts/run_scripts/Robocasa/run_lerobot_datasets_qwenGR00T.sh
+```
+
+# Evaluation
 ## ⬇️ 0. Download Checkpoints
 First, download the checkpoints from 
-- [LIBERO-Object](https://huggingface.co/InternRobotics/InternVLA-M1-LIBERO-Object)
-- [LIBERO-Spatial](https://huggingface.co/InternRobotics/InternVLA-M1-LIBERO-Spatial)
-- [LIBERO-Goal](https://huggingface.co/InternRobotics/InternVLA-M1-LIBERO-Goal)
-- [LIBERO-Long](https://huggingface.co/InternRobotics/InternVLA-M1-LIBERO-Long)
-
+- [Qwen3VL-GR00T]()
 
 
 ## 📦 1. Environment Setup
 
-To set up the environment, please first follow the official [LIBERO repository](https://github.com/Lifelong-Robot-Learning/LIBERO) to install the base `LIBERO` environment.  
+To set up the environment, please first follow the [official RoboCasa installation guide](https://github.com/robocasa/robocasa-gr1-tabletop-tasks?tab=readme-ov-file#getting-started) to install the base `robocasa-gr1-tabletop-tasks` environment.  
 
 ---
 
 ## 🚀 2. Evaluation Workflow
 
-The evaluation should be run **from the repository root** using **two separate terminals**, one for each environment:  
+### Step 1. Start the server (starVLA environment)
 
-- **internvla_m1 environment**: runs the inference server.  
-- **LIBERO environment**: runs the simulation.  
-
-### Step 1. Start the server (internvla_m1 environment)
-
-In the first terminal, activate the `internvla_m1` conda environment and run:  
+In the first terminal, activate the `starVLA` conda environment and run:  
 
 ```bash
-bash examples/LIBERO/run_server.sh
+python deployment/model_server/server_policy.py \
+        --ckpt_path ${your_ckpt} \
+        --port ${port} \
+        --use_bf16
 ```
-
-⚠️ **Note:** Please ensure that you specify the correct checkpoint path in `examples/LIBERO/run_server.sh`  
-
 
 ---
 
-### Step 2. Start the simulation (LIBERO environment)
+### Step 2. Start the simulation (robocasa environment)
 
-In the second terminal, activate the `LIBERO` conda environment and run:  
-
-```bash
-bash examples/LIBERO/eval_libero.sh
-```
-⚠️ **Note:** Please ensure that you specify the correct checkpoint path in `examples/LIBERO/eval_libero.sh` to load action unnormalization stats. 
-
-
-
----
-
-
-# 🚀 LIBERO Training
-## 📦 Step0: Download the training dataset
-Download the datasets to the playground/Datasets/LEROBOT_LIBERO_DATA directory:
-- [LIBERO-spatial] https://huggingface.co/datasets/IPEC-COMMUNITY/libero_spatial_no_noops_1.0.0_lerobot
-- [LIBERO-object] https://huggingface.co/datasets/IPEC-COMMUNITY/libero_object_no_noops_1.0.0_lerobot
-- [LIBERO-goal] https://huggingface.co/datasets/IPEC-COMMUNITY/libero_goal_no_noops_1.0.0_lerobot
-- [LIBERO-10] https://huggingface.co/datasets/IPEC-COMMUNITY/libero_10_no_noops_1.0.0_lerobot
-
-## 🚀 Step1: Start Training
+In the second terminal, activate the `robocasa` conda environment and run:  
 
 ```bash
-bash scripts/run_scripts/run_libero_train.sh
+python examples/Robocasa_tabletop/simulation_env.py \
+        --args.env_name ${env_name} \
+        --args.port ${port} \
+        --args.n_episodes 50 \
+        --args.n_envs 1 \
+        --args.max_episode_steps 720 \
+        --args.n_action_steps 12 \
+        --args.video_out_path ${video_out_path} \
+        --args.pretrained_path ${your_ckpt}
 ```
+
+If you have more GPU, you can use the batch evaluation script:
+```bash
+bash examples/Robocasa_tabletop/batch_eval_args.sh
+```
+
+
