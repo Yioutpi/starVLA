@@ -1333,22 +1333,22 @@ def generate_action_mask_for_used_keys(action_modalities: dict, used_action_keys
     
     return mask
 
-def get_used_modality_keys(modality_keys: dict) -> tuple[set, set]:
+def get_used_modality_keys(modality_keys: dict) -> tuple[list, list]:
     """Extract used action and state keys from modality configuration."""
-    used_action_keys = set()
-    used_state_keys = set()
+    used_action_keys = []
+    used_state_keys = []
     
     # Extract action keys (remove "action." prefix)
     for action_key in modality_keys.get("action", []):
         if action_key.startswith("action."):
             clean_key = action_key.replace("action.", "")
-            used_action_keys.add(clean_key)
+            used_action_keys.append(clean_key)
     
     # Extract state keys (remove "state." prefix)  
     for state_key in modality_keys.get("state", []):
         if state_key.startswith("state."):
             clean_key = state_key.replace("state.", "")
-            used_state_keys.add(clean_key)
+            used_state_keys.append(clean_key)
     
     return used_action_keys, used_state_keys
 
@@ -1567,8 +1567,13 @@ class LeRobotMixtureDataset(Dataset):
                 for action_key in dataset.modality_keys["action"]:
                     action.append(data[action_key])
                 action = np.concatenate(action, axis=1).astype(np.float16)
+
+                state = []
+                for state_key in dataset.modality_keys["state"]:
+                    state.append(data[state_key])
+                state = np.concatenate(state, axis=1).astype(np.float16)
                 
-                return dict(action=action, image=images, lang=language)
+                return dict(action=action, image=images, lang=language, state=state)
                 
             except Exception as e:
                 last_exception = e
@@ -1862,13 +1867,16 @@ class LeRobotMixtureDataset(Dataset):
         statistics_data = {}
         
         # Collect actually used keys from all datasets
-        all_used_action_keys = set()
-        all_used_state_keys = set()
+        all_used_action_keys = []
+        all_used_state_keys = []
         
         for dataset in self.datasets:
             used_action_keys, used_state_keys = get_used_modality_keys(dataset.modality_keys)
-            all_used_action_keys.update(used_action_keys)
-            all_used_state_keys.update(used_state_keys)
+            for used_action_key, used_state_key in zip(used_action_keys, used_state_keys):
+                if used_action_key not in all_used_action_keys:
+                    all_used_action_keys.append(used_action_key)
+                if used_state_key not in all_used_state_keys:
+                    all_used_state_keys.append(used_state_key)
         
         # Organize statistics by tag
         for tag, merged_metadata in self.merged_metadata.items():
@@ -1878,12 +1886,12 @@ class LeRobotMixtureDataset(Dataset):
             if hasattr(merged_metadata.statistics, 'action') and merged_metadata.statistics.action:
                 action_stats = merged_metadata.statistics.action
                 
-                # Filter and reorder keys
+                # Filter and reorder keys - iterate in all_used_action_keys order
                 non_gripper_keys = []
                 gripper_keys = []
                 
-                for key in action_stats.keys():
-                    if key in all_used_action_keys:
+                for key in all_used_action_keys:
+                    if key in action_stats:
                         if "gripper" in key.lower():
                             gripper_keys.append(key)
                         else:
@@ -1909,12 +1917,12 @@ class LeRobotMixtureDataset(Dataset):
             if hasattr(merged_metadata.statistics, 'state') and merged_metadata.statistics.state:
                 state_stats = merged_metadata.statistics.state
                 
-                # Filter and reorder keys
+                # Filter and reorder keys - iterate in all_used_state_keys order
                 non_gripper_keys = []
                 gripper_keys = []
                 
-                for key in state_stats.keys():
-                    if key in all_used_state_keys:
+                for key in all_used_state_keys:
+                    if key in state_stats:
                         if "gripper" in key.lower():
                             gripper_keys.append(key)
                         else:

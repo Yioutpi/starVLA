@@ -40,7 +40,7 @@ def make_LeRobotSingleDataset(
         modality_configs=modality_config,
         transforms=transforms,
         embodiment_tag=embodiment_tag,
-        video_backend="torchvision_av",
+        video_backend="decord",  # HACK  torchvision_av
         delete_pause_frame=delete_pause_frame,
     )
 
@@ -50,7 +50,6 @@ def get_vla_dataset(
     balance_dataset_weights: bool = False,
     balance_trajectory_weights: bool = False,
     seed: int = 42,
-    delete_pause_frame: bool = True,
     **kwargs: dict,
 ) -> LeRobotMixtureDataset:
     """
@@ -58,6 +57,7 @@ def get_vla_dataset(
     """
     data_root_dir = data_cfg.data_root_dir
     data_mix = data_cfg.data_mix
+    delete_pause_frame = data_cfg.delete_pause_frame
     mixture_spec = DATASET_NAMED_MIXTURES[data_mix]
     included_datasets, filtered_mixture_spec = set(), []
     for d_name, d_weight, robot_type in mixture_spec:  
@@ -89,12 +89,13 @@ if __name__ == "__main__":
     parser.add_argument("--config_yaml", type=str, default="./starVLA/config/training/starvla_cotrain_oxe.yaml", help="Path to YAML config")
     args, clipargs = parser.parse_known_args()
 
-    debugpy.listen(("0.0.0.0", 10092))
-    print("🔍 Rank 0 waiting for debugger attach on port 10092...")
-    debugpy.wait_for_client()
+    # debugpy.listen(("0.0.0.0", 10092))
+    # print("🔍 Rank 0 waiting for debugger attach on port 10092...")
+    # debugpy.wait_for_client()
 
     cfg = OmegaConf.load(args.config_yaml)
-
+    cfg.datasets.vla_data.data_root_dir = "/mnt/petrelfs/wangfangjing/code/starVLA/playground/Datasets/PhysicalAI-Robotics-GR00T-X-Embodiment-Sim-All"
+    cfg.datasets.vla_data.data_mix = "fourier_gr1_10K_pretrain"
     vla_dataset_cfg = cfg.datasets.vla_data
     dataset = get_vla_dataset(data_cfg=vla_dataset_cfg)
     
@@ -102,11 +103,20 @@ if __name__ == "__main__":
     train_dataloader = DataLoader(
         dataset,
         batch_size=16,
-        num_workers=1, # For Debug
+        num_workers=16, # For Debug
         collate_fn=collate_fn,
     )
 
+    cfg.output_dir = "./results/debug"
+    output_dir = Path(cfg.output_dir)
+    dataset.save_dataset_statistics(output_dir / "dataset_statistics.json")
+
     from tqdm import tqdm
+    import time
+    start_time = time.time()
     for batch in tqdm(train_dataloader, desc="Processing Batches"):
         print(batch)
+        end_time = time.time()
+        print(f"Time taken for batch: {end_time - start_time} seconds")
+        start_time = end_time
         pass
